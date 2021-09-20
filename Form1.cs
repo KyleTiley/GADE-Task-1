@@ -55,4 +55,21 @@ namespace GADE_Task_1
 
         }
     }
+
+    //Question 2.2
+    public abstract class Character //must inherit from Tile??
+    {
+        int HP;
+        int MaxHP;
+        int Damage;
+        int[] Vision;
+        public enum Movement
+        {
+            NoMovement,
+            Up,
+            Down,
+            Left,
+            Right,
+        }
+    }
 }
