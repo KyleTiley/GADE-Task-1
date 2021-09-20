@@ -17,5 +17,42 @@ namespace GADE_Task_1
             InitializeComponent();
         }
 
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+    }
+
+    //Question 2.1
+    public abstract class Tile
+    {
+        protected int X;
+        protected int Y;
+        public enum TileType
+        {
+            Hero,
+            Enemy,
+            Gold,
+            Weapon,
+        }
+        public Tile(int x, int y)
+        {
+            this.X = x;
+            this.Y = y;
+        }
+    }
+    public class Obstacle : Tile
+    {
+        public Obstacle() : base(1,1)
+        {
+            
+        }
+    }
+    public class EmptyTile : Tile
+    {
+        public EmptyTile() : base(1, 1)
+        {
+
+        }
     }
 }
