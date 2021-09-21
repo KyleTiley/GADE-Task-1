@@ -62,7 +62,7 @@ namespace GADE_Task_1
         int HP;
         int MaxHP;
         int Damage;
-        int[] Vision;
+        int[] Vision = new int[4];
         public enum Movement
         {
             NoMovement,
