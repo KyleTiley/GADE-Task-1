@@ -52,12 +52,12 @@ namespace GADE_Task_1
     {
         public EmptyTile() : base(1, 1)
         {
-
+            
         }
     }
 
     //Question 2.2
-    public abstract class Character //must inherit from Tile??
+    public abstract class Character //must inherit from Tile how to do this??
     {
         int HP;
         int MaxHP;
