@@ -88,20 +88,49 @@ namespace GADE_Task_1
         {
 
         }
-        public abstract override ToString() //overrides the Object ToString() method
-        {
-
-        }
+        public abstract override string ToString(); //overrides the Object ToString() method
     }
 
     //Question 2.4
     abstract class Enemy : Character
     {
-        Random rnd = new Random();  //random object
-        public Enemy()
+        Random rnd = new Random();  //the random object
+        public Enemy() : base() //still needs to receive all relevant values
         {
             
         }
-        
+        public override string ToString()   //ToString() object to be used by enemy subclasses
+        {
+            //output must look like: EnemyClassName at [X, Y] (Amount DMG)
+        }
+    }
+
+    //Question 2.5
+    public class Goblin : Enemy
+    {
+        public Goblin(int x, int y) : base(x, y)    //receives X and Y positions
+        {
+            //goblins have 10 HP
+            //goblins do 1 damage
+        }
+        //need to do overridden ReturnMove() method 
+    }
+
+    //Question 2.6
+    public class Hero : Character
+    {
+        public Hero(int x, int y, int HP) : base(x, y)    //receives X and Y positions but also HP???? fix
+        {
+            //hero does 2 damage
+        }
+        //need to do overridden ReturnMove() method
+        public override string ToString()   //ToString() object for player stats
+        {
+        //output must look like:
+        //Player Stats:
+        //HP: HP / Max HP
+        //  Damage: 2
+        // [X, Y]
+        }
     }
 }
