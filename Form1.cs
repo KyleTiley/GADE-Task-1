@@ -24,113 +24,118 @@ namespace GADE_Task_1
     }
 
     //Question 2.1
-    public abstract class Tile
+    abstract class Tile //Base class for all in-game objects that have positions on the map
     {
-        protected int X;
-        protected int Y;
-        public enum TileType {Hero, Enemy, Gold, Weapon}
-        public Tile(int x, int y)   //constructor for the class Tile
+        protected int x;
+        protected int y;
+        public enum TileType { Hero, Enemy, Gold, Weapon }    //Used to determine what kind of tiles to create
+        public Tile(int _x, int _y)   //Constructor for the class Tile
         {
-            this.X = x;
-            this.Y = y;
+            x = _x;
+            y = _y;
         }
     }
-    public class Obstacle : Tile    //Obstacle class is child of Tile class
+    class Obstacle : Tile
     {
-        public Obstacle(int x, int y) : base(x,y)   //constructor that calls the base class with the X and Y parameters
+        public Obstacle(int _x, int _y) : base(_x,_y)   //Constructor that calls the base class with the X and Y parameters
         {
-            //set the border values here
+            //sets the borders
         }
     }
-    public class EmptyTile : Tile
+    class EmptyTile : Tile
     {
-        public EmptyTile(int x, int y) : base(x, y)
+        public EmptyTile(int _x, int _y) : base(_x, _y)
         {
-            //set the empty tile values here
+            //sets the empty tiles
         }
     }
 
     //Question 2.2
-    public abstract class Character : Tile
+    abstract class Character : Tile
     {
-        protected int HP;
-        protected int MaxHP;
-        protected int Damage;
-        protected int[] Vision = new int[4];
-        public enum Movement { NoMovement, Up, Down, Left, Right }
+        protected int hp;
+        protected int maxHp;
+        protected int damage;
+        protected int[] visionTiles = new int[4];
+        public enum MovementEnum { NoMovement, Up, Down, Left, Right }
 
         //Question 2.3
-        public Character(int x, int y) : base(x,y)
+        public Character(int _x, int _y, char _symbol) : base(_x,_y)  //Character constructor wityh x and y positions, and a symbol
         {
-            //symbol part still needs to be done?????
+            //??? must still delegate variable settings to Tile
         }
-        public virtual void Attack(Character target)    //attacks target and decreases its health
+        public virtual void Attack(Character target)    //Attacks target and decreases its health
         {
 
         }
-        public bool IsDead()    //checks if character is dead
+        public bool IsDead()    //Checks if character is dead
         {
-            
+            //return of true or false still required
         }
-        public virtual bool CheckRange(Character target)    //checks if target is in range of a character
+        public virtual bool CheckRange(Character target)    //Checks if target is in range of a character
         {
-            DistanceTo();
+            //determines distance via the DistanceTo() method
+            //return of true or false still required
         }
         private int DistanceTo(target)  //determines absolute distance between a character and its target
         {
-
+            //return of distance integer still required
+            //??? why is target used here
         }
-        public void Move(MovementEnum move) //edits a unit's X and Y values to move it in a direction
+        public void Move(MovementEnum move) //Edits a unit's X and Y values to move it in a direction
         {
-
+            
         }
-        public abstract MovementEnum ReturnMove(MovementEnum move = 0)  //returns a direction of movement based on how the character should move
-        {
-
-        }
-        public abstract override string ToString(); //overrides the Object ToString() method
+        public abstract MovementEnum ReturnMove(MovementEnum move = 0);  //Returns a direction of movement based on how the character should move
+        public abstract override string ToString(); //Overrides the Object ToString() method
     }
 
     //Question 2.4
     abstract class Enemy : Character
     {
-        Random rnd = new Random();  //the random object
-        public Enemy() : base() //still needs to receive all relevant values
+        Random rnd = new Random();  //The random object
+        public Enemy(int _x, int _y, int _damage, int _hp, int _maxHp, char _symbol) : base(_x, _y, _symbol)
         {
-            
+            damage = _damage;
+            hp = _hp;
+            maxHp = _maxHp;
         }
         public override string ToString()   //ToString() object to be used by enemy subclasses
         {
-            //output must look like: EnemyClassName at [X, Y] (Amount DMG)
+            return "EnemyClassName at [X, Y] (Amount DMG)"; //??? needs to be implemented properly
         }
     }
 
     //Question 2.5
-    public class Goblin : Enemy
+    class Goblin : Enemy
     {
-        public Goblin(int x, int y) : base(x, y)    //receives X and Y positions
+        public Goblin(int _x, int _y) : base(_x, _y)    //??? figure out how to delegate properly
         {
             //goblins have 10 HP
             //goblins do 1 damage
         }
-        //need to do overridden ReturnMove() method 
+        public override MovementEnum ReturnMove()    //Randoms a direction for the Goblin to move
+        {
+            //??? implement random direction picker
+            //return of MovementEnum still required
+        }
     }
 
     //Question 2.6
-    public class Hero : Character
+    class Hero : Character
     {
-        public Hero(int x, int y, int HP) : base(x, y)    //receives X and Y positions but also HP???? fix
+        public Hero(int _x, int _y, int _hp) : base(_x, _y)    //??? figure out how to delegate properly
         {
-            //hero does 2 damage
+            //hero always does 2 damage
         }
-        //need to do overridden ReturnMove() method
+        public override MovementEnum ReturnMove(//??? is MovementEnum move = MovementEnum.NoMovement correct)
+        {
+            //receives directional button press
+            //return of number for movement indication still required
+        }
         public override string ToString()   //ToString() object for player stats
         {
-        //output must look like:
-        //Player Stats:
-        //HP: HP / Max HP
-        //  Damage: 2
-        // [X, Y]
+            return "Player Stats:" + "\n" + "HP: HP/Max HP" + "Damage: 2" + "[X,Y]"; //??? needs to be implemented properly
         }
     }
 }
