@@ -29,10 +29,17 @@ namespace GADE_Task_1
         protected int x;
         protected int y;
         public enum TileType { Hero, Enemy, Gold, Weapon }    //Used to determine what kind of tiles to create
-        public Tile(int _x, int _y)   //Constructor for the class Tile
+        TileType tileType;
+        public Tile(int _x, int _y)   //Constructor
         {
             x = _x;
             y = _y;
+        }
+        public Tile(int _x, int _y, TileType _tileType)   //Constructor
+        {
+            x = _x;
+            y = _y;
+            tileType = _tileType;
         }
     }
     class Obstacle : Tile
@@ -56,35 +63,68 @@ namespace GADE_Task_1
         protected int hp;
         protected int maxHp;
         protected int damage;
-        protected int[] visionTiles = new int[4];
+        protected int[] visionTiles = new int[4];   //Will hold North, South, East, West
         public enum MovementEnum { NoMovement, Up, Down, Left, Right }
+        MovementEnum move;
 
         //Question 2.3
         public Character(int _x, int _y, char _symbol) : base(_x,_y)  //Character constructor wityh x and y positions, and a symbol
         {
-            //??? must still delegate variable settings to Tile
+            x = _x;
+            y = _y;
         }
         public virtual void Attack(Character target)    //Attacks target and decreases its health
         {
-
+            //??? must implement properly
         }
         public bool IsDead()    //Checks if character is dead
         {
-            //return of true or false still required
+            if (hp > 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
         public virtual bool CheckRange(Character target)    //Checks if target is in range of a character
         {
-            //determines distance via the DistanceTo() method
-            //return of true or false still required
+            if (DistanceTo(target) == 1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
-        private int DistanceTo(target)  //determines absolute distance between a character and its target
+        private int DistanceTo(Character target)  //Determines absolute distance between a character and its target
         {
-            //return of distance integer still required
-            //??? why is target used here
+            return ((y-target.y)+(x-target.x));
         }
         public void Move(MovementEnum move) //Edits a unit's X and Y values to move it in a direction
         {
-            
+            if (move == MovementEnum.Up)
+            {
+                y++;
+            }
+            else if (move == MovementEnum.Down)
+            {
+                y--;
+            }
+            else if (move == MovementEnum.Left)
+            {
+                x--;
+            }
+            else if (move == MovementEnum.Right)
+            {
+                x++;
+            }
+            else if (move == MovementEnum.NoMovement)
+            {
+                //nothing yet
+            }
         }
         public abstract MovementEnum ReturnMove(MovementEnum move = 0);  //Returns a direction of movement based on how the character should move
         public abstract override string ToString(); //Overrides the Object ToString() method
@@ -93,7 +133,7 @@ namespace GADE_Task_1
     //Question 2.4
     abstract class Enemy : Character
     {
-        Random rnd = new Random();  //The random object
+        protected Random randomNum;  //The random object
         public Enemy(int _x, int _y, int _damage, int _hp, int _maxHp, char _symbol) : base(_x, _y, _symbol)
         {
             damage = _damage;
@@ -102,40 +142,69 @@ namespace GADE_Task_1
         }
         public override string ToString()   //ToString() object to be used by enemy subclasses
         {
-            return "EnemyClassName at [X, Y] (Amount DMG)"; //??? needs to be implemented properly
+            return "Goblin at [" + x + "," + y + "] " + "(" + damage + ")";
         }
     }
 
     //Question 2.5
     class Goblin : Enemy
     {
-        public Goblin(int _x, int _y) : base(_x, _y)    //??? figure out how to delegate properly
+        public Goblin(int _x, int _y, int _damage, int _hp, int _maxHp, char _symbol) : base(_x, _y, _damage, _hp, _maxHp, _symbol)    //??? figure out how to delegate properly
         {
-            //goblins have 10 HP
-            //goblins do 1 damage
+            _maxHp = 10;
+            _damage = 1;
+            _symbol = 'G';
         }
-        public override MovementEnum ReturnMove()    //Randoms a direction for the Goblin to move
+        public override MovementEnum ReturnMove(MovementEnum move)    //Randoms a direction for the Goblin to move
         {
-            //??? implement random direction picker
-            //return of MovementEnum still required
+            return move;    //??? needs work and randomisation
         }
     }
 
     //Question 2.6
     class Hero : Character
     {
-        public Hero(int _x, int _y, int _hp) : base(_x, _y)    //??? figure out how to delegate properly
+        public Hero(int _x, int _y, int _damage, int _hp, int _maxHp, char _symbol) : base(_x, _y, _symbol)    //??? figure out how to delegate properly
         {
-            //hero always does 2 damage
+            hp = _hp;
+            maxHp = _maxHp;
+            _damage = 2;
         }
-        public override MovementEnum ReturnMove(//??? is MovementEnum move = MovementEnum.NoMovement correct)
+        public override MovementEnum ReturnMove(MovementEnum move)    //Takes direction from keyboard or form buttons
         {
-            //receives directional button press
-            //return of number for movement indication still required
+            return move;    //??? needs work
         }
         public override string ToString()   //ToString() object for player stats
         {
-            return "Player Stats:" + "\n" + "HP: HP/Max HP" + "Damage: 2" + "[X,Y]"; //??? needs to be implemented properly
+            return "Player Stats:" + "\n" + hp + "/" + maxHp+ "\n" + "Damage: 2" + "\n" + "[" + x + "," + y + "]"; //??? needs to be implemented properly
         }
+    }
+
+    //Question 3.1
+    class Map
+    {
+        char[,] tiles;  //??? must initialise with outside border of obstacles
+        Hero player;
+        Enemy[] enemies;
+        int mapWidth;
+        int mapHeight;
+        Random randomNum;
+
+        //Question 3.2
+        int randomGenerator(int min, int max)
+        {
+            return randomNum.Next(min, max);
+        }
+        public Map(int minWidth, int maxWidth, int minHeight, int maxHeight, int numOfEnemies)
+        {
+            mapWidth = randomGenerator(minWidth, maxWidth + 1);
+            mapHeight = randomGenerator(minHeight, maxHeight + 1);
+            tiles = new char[mapWidth, mapHeight];
+            Tile Create()
+            {
+
+            }
+        }
+
     }
 }
