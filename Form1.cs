@@ -28,23 +28,17 @@ namespace GADE_Task_1
     {
         protected int x;
         protected int y;
-        public enum TileType { Hero, Enemy, Gold, Weapon }    //Used to determine what kind of tiles to create
-        TileType tileType;
+        protected char symbol;
+        public enum TileType { Hero, Enemy, Gold, Weapon }   //Used to determine what kind of tiles to create
         public Tile(int _x, int _y)   //Constructor
         {
             x = _x;
             y = _y;
         }
-        public Tile(int _x, int _y, TileType _tileType)   //Constructor
-        {
-            x = _x;
-            y = _y;
-            tileType = _tileType;
-        }
     }
     class Obstacle : Tile
     {
-        public Obstacle(int _x, int _y) : base(_x,_y)   //Constructor that calls the base class with the X and Y parameters
+        public Obstacle(int _x, int _y) : base(_x,_y)
         {
             //sets the borders
         }
@@ -63,19 +57,17 @@ namespace GADE_Task_1
         protected int hp;
         protected int maxHp;
         protected int damage;
-        protected int[] visionTiles = new int[4];   //Will hold North, South, East, West
+        public Tile[] visionTiles;   //Will hold North, South, East, West
         public enum MovementEnum { NoMovement, Up, Down, Left, Right }
-        MovementEnum move;
 
         //Question 2.3
         public Character(int _x, int _y, char _symbol) : base(_x,_y)  //Character constructor wityh x and y positions, and a symbol
         {
-            x = _x;
-            y = _y;
+            symbol = _symbol;
         }
         public virtual void Attack(Character target)    //Attacks target and decreases its health
         {
-            //??? must implement properly
+            target.hp = target.hp - damage;
         }
         public bool IsDead()    //Checks if character is dead
         {
@@ -101,17 +93,17 @@ namespace GADE_Task_1
         }
         private int DistanceTo(Character target)  //Determines absolute distance between a character and its target
         {
-            return ((y-target.y)+(x-target.x));
+            return (Math.Abs(y-target.y)+Math.Abs(x-target.x));
         }
         public void Move(MovementEnum move) //Edits a unit's X and Y values to move it in a direction
         {
             if (move == MovementEnum.Up)
             {
-                y++;
+                y--;
             }
             else if (move == MovementEnum.Down)
             {
-                y--;
+                y++;
             }
             else if (move == MovementEnum.Left)
             {
@@ -123,7 +115,7 @@ namespace GADE_Task_1
             }
             else if (move == MovementEnum.NoMovement)
             {
-                //nothing yet
+                //Nothing
             }
         }
         public abstract MovementEnum ReturnMove(MovementEnum move = 0);  //Returns a direction of movement based on how the character should move
@@ -142,50 +134,115 @@ namespace GADE_Task_1
         }
         public override string ToString()   //ToString() object to be used by enemy subclasses
         {
-            return "Goblin at [" + x + "," + y + "] " + "(" + damage + ")";
+            return symbol + " at [" + x + "," + y + "] " + "(" + damage + ")";
         }
     }
 
     //Question 2.5
     class Goblin : Enemy
     {
-        public Goblin(int _x, int _y, int _damage, int _hp, int _maxHp, char _symbol) : base(_x, _y, _damage, _hp, _maxHp, _symbol)    //??? figure out how to delegate properly
+        public Goblin(int _x, int _y, int _damage, int _hp, int _maxHp, char _symbol) : base(_x, _y, _damage, _hp, _maxHp, _symbol)
         {
-            _maxHp = 10;
-            _damage = 1;
-            _symbol = 'G';
+            maxHp = 10;
+            damage = 1;
+            symbol = 'G';
         }
         public override MovementEnum ReturnMove(MovementEnum move)    //Randoms a direction for the Goblin to move
         {
-            return move;    //??? needs work and randomisation
+            Random randomNum = new Random();
+            MovementEnum inputtedMovement = MovementEnum.NoMovement;
+            while(inputtedMovement == MovementEnum.NoMovement)
+            {
+                int newRandom = randomNum.Next(1, 5);
+                if (newRandom == 1 && visionTiles[(int)MovementEnum.Up] is EmptyTile)
+                {
+                    inputtedMovement = MovementEnum.Up;
+                }
+                else if (newRandom == 2 && visionTiles[(int)MovementEnum.Down] is EmptyTile)
+                {
+                    inputtedMovement = MovementEnum.Down;
+                }
+                else if (newRandom == 3 && visionTiles[(int)MovementEnum.Left] is EmptyTile)
+                {
+                    inputtedMovement = MovementEnum.Left;
+                }
+                else if (newRandom == 4 && visionTiles[(int)MovementEnum.Right] is EmptyTile)
+                {
+                    inputtedMovement = MovementEnum.Right;
+                }
+                else
+                {
+                    inputtedMovement = MovementEnum.NoMovement;
+                }
+            }
+            return inputtedMovement;
         }
     }
 
     //Question 2.6
     class Hero : Character
     {
-        public Hero(int _x, int _y, int _damage, int _hp, int _maxHp, char _symbol) : base(_x, _y, _symbol)    //??? figure out how to delegate properly
+        public Hero(int _x, int _y, int _hp, int _maxHp, char _symbol) : base(_x, _y, _symbol)
         {
             hp = _hp;
             maxHp = _maxHp;
-            _damage = 2;
+            damage = 2;
         }
         public override MovementEnum ReturnMove(MovementEnum move)    //Takes direction from keyboard or form buttons
         {
-            return move;    //??? needs work
+            switch (move)
+            {
+                case MovementEnum.Up:
+                    if(visionTiles[(int)MovementEnum.Up] is EmptyTile)
+                    {
+                        return MovementEnum.Up;
+                    }
+                    else
+                    {
+                        return MovementEnum.NoMovement;
+                    }
+                case MovementEnum.Down:
+                    if (visionTiles[(int)MovementEnum.Down] is EmptyTile)
+                    {
+                        return MovementEnum.Down;
+                    }
+                    else
+                    {
+                        return MovementEnum.NoMovement;
+                    }
+                case MovementEnum.Left:
+                    if (visionTiles[(int)MovementEnum.Left] is EmptyTile)
+                    {
+                        return MovementEnum.Left;
+                    }
+                    else
+                    {
+                        return MovementEnum.NoMovement;
+                    }
+                case MovementEnum.Right:
+                    if (visionTiles[(int)MovementEnum.Right] is EmptyTile)
+                    {
+                        return MovementEnum.Right;
+                    }
+                    else
+                    {
+                        return MovementEnum.NoMovement;
+                    }
+                default: return MovementEnum.NoMovement;
+            }
         }
         public override string ToString()   //ToString() object for player stats
         {
-            return "Player Stats:" + "\n" + hp + "/" + maxHp+ "\n" + "Damage: 2" + "\n" + "[" + x + "," + y + "]"; //??? needs to be implemented properly
+            return "Player Stats:" + "\n" + hp + "/" + maxHp+ "\n" + "Damage: " + damage + "\n" + "[" + x + "," + y + "]";
         }
     }
 
     //Question 3.1
     class Map
     {
-        char[,] tiles;  //??? must initialise with outside border of obstacles
+        Tile[,] tiles;
         Hero player;
-        int[] enemies;
+        Enemy[] enemies;
         int mapWidth;
         int mapHeight;
         Random randomNum;
@@ -199,23 +256,27 @@ namespace GADE_Task_1
         {
             mapWidth = randomGenerator(minWidth, maxWidth + 1);
             mapHeight = randomGenerator(minHeight, maxHeight + 1);
-            tiles = new char[mapWidth, mapHeight];
-            Create();
-            foreach (int i in enemies)
+            tiles = new Tile[mapWidth, mapHeight];
+            enemies = new Enemy[numOfEnemies];
+            //??? need to call create
+            for()
             {
-                //create enemies
+                
             }
             UpdateVision();
         }
-        private Tile Create(TileType type)  //??? fix
+        public void UpdateVision(int numOfEnemies)
+        {
+            for(int i = 0, i < numOfEnemies, i++)
+            {
+                enemies[i].visionTiles = new Tile[5];
+                enemies[i].visionTiles[(int)Character.MovementEnum.Up]=(Tile)tiles[enemies[i].]
+            }
+        }
+        private Tile Create(Tile.TileType _type)  //??? fix
         {
 
         }
-        public void UpdateVision()
-        {
-
-        }
-        //??? other integration methods
     }
 
     //Question 3.3
@@ -224,11 +285,34 @@ namespace GADE_Task_1
         private Map map;
         public GameEngine()
         {
-            Map map = new Map(minWidth, maxWidth, minHeight, maxHeight, numOfEnemies);  //??? fix
+            Map map = new Map(20, 30, 20, 30, 5);  //??? not sure what numbers to use here
         }
-        public bool MovePlayer(MovementEnum direction)  //??? figure out why it cant be found
+        public bool MovePlayer(Character.MovementEnum direction)    //moves player to a new tile, setting old tile to an empty tile
         {
-            //??? set up return types
+            if ()
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        private static readonly char Hero = 'H';
+        private static readonly char Empty = ' ';
+        private static readonly char Goblin = 'G';
+        private static readonly char Obstacle = '#';
+        public override string ToString()
+        {
+            string finalMap = " ";
+            for ()
+            {
+                for ()
+                {
+
+                }
+            }
+            return finalMap;
         }
     }
 }
