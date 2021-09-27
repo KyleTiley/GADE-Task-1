@@ -238,13 +238,13 @@ namespace GADE_Task_1
     }
 
     //Question 3.1
-    class Map
+    public class Map
     {
         Tile[,] tiles;
         Hero player;
         Enemy[] enemies;
-        int mapWidth;
-        int mapHeight;
+        public int mapWidth;
+        public int mapHeight;
         Random randomNum;
 
         //Question 3.2
@@ -258,24 +258,35 @@ namespace GADE_Task_1
             mapHeight = randomGenerator(minHeight, maxHeight + 1);
             tiles = new Tile[mapWidth, mapHeight];
             enemies = new Enemy[numOfEnemies];
-            //??? need to call create
-            for()
+            Create(Tile.TileType.Hero);
+            for (int i = 0; i<numOfEnemies;i++)
             {
-                
+                Create(Tile.TileType.Enemy);
             }
             UpdateVision();
         }
-        public void UpdateVision(int numOfEnemies)
+        public void UpdateVision()
         {
-            for(int i = 0, i < numOfEnemies, i++)
-            {
-                enemies[i].visionTiles = new Tile[5];
-                enemies[i].visionTiles[(int)Character.MovementEnum.Up]=(Tile)tiles[enemies[i].]
-            }
+            //??? confused
         }
         private Tile Create(Tile.TileType _type)  //??? fix
         {
-
+            int _x = randomGenerator(2, mapWidth-2);
+            int _y = randomGenerator(2, mapHeight - 2);
+            while(tiles[_x,_y] is EmptyTile != true)
+            {
+                _x = randomGenerator(2, mapWidth - 2);
+                _y = randomGenerator(2, mapHeight - 2);
+            }
+            if (_type == Tile.TileType.Hero)
+            {
+                tiles[_x, _y] = new Hero(_x, _y, 10,10,'H');
+            }
+            if (_type == Tile.TileType.Enemy)
+            {
+                tiles[_x, _y] = new Goblin(_x, _y,1, 10, 10, 'G');
+            }
+            return tiles[_x, _y];
         }
     }
 
@@ -287,7 +298,7 @@ namespace GADE_Task_1
         {
             Map map = new Map(20, 30, 20, 30, 5);  //??? not sure what numbers to use here
         }
-        public bool MovePlayer(Character.MovementEnum direction)    //moves player to a new tile, setting old tile to an empty tile
+        bool MovePlayer(Character.MovementEnum direction)    //moves player to a new tile, setting old tile to an empty tile
         {
             if ()
             {
@@ -305,12 +316,13 @@ namespace GADE_Task_1
         public override string ToString()
         {
             string finalMap = " ";
-            for ()
+            for (int _x = 0;_x < Map.mapWidth; _x++)
             {
-                for ()
+                for (int _y = 0; _y < Map.mapHeight; _y++)
                 {
-
+                    //??? not sure how to do this
                 }
+                finalMap = finalMap + "\n";
             }
             return finalMap;
         }
