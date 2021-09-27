@@ -185,7 +185,7 @@ namespace GADE_Task_1
     {
         char[,] tiles;  //??? must initialise with outside border of obstacles
         Hero player;
-        Enemy[] enemies;
+        int[] enemies;
         int mapWidth;
         int mapHeight;
         Random randomNum;
@@ -200,11 +200,35 @@ namespace GADE_Task_1
             mapWidth = randomGenerator(minWidth, maxWidth + 1);
             mapHeight = randomGenerator(minHeight, maxHeight + 1);
             tiles = new char[mapWidth, mapHeight];
-            Tile Create()
+            Create();
+            foreach (int i in enemies)
             {
-
+                //create enemies
             }
+            UpdateVision();
         }
+        private Tile Create(TileType type)  //??? fix
+        {
 
+        }
+        public void UpdateVision()
+        {
+
+        }
+        //??? other integration methods
+    }
+
+    //Question 3.3
+    public class GameEngine
+    {
+        private Map map;
+        public GameEngine()
+        {
+            Map map = new Map(minWidth, maxWidth, minHeight, maxHeight, numOfEnemies);  //??? fix
+        }
+        public bool MovePlayer(MovementEnum direction)  //??? figure out why it cant be found
+        {
+            //??? set up return types
+        }
     }
 }
