@@ -34,6 +34,7 @@ namespace GADE_Task_1
             this.right_button = new System.Windows.Forms.Button();
             this.down_button = new System.Windows.Forms.Button();
             this.playerStats_label = new System.Windows.Forms.Label();
+            this.enemy_label = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // up_button
@@ -83,11 +84,22 @@ namespace GADE_Task_1
             this.playerStats_label.Text = "                                                                                 " +
     "               \r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n";
             // 
+            // enemy_label
+            // 
+            this.enemy_label.AutoSize = true;
+            this.enemy_label.Location = new System.Drawing.Point(507, 233);
+            this.enemy_label.Name = "enemy_label";
+            this.enemy_label.Size = new System.Drawing.Size(12, 15);
+            this.enemy_label.TabIndex = 5;
+            this.enemy_label.Text = "-";
+            this.enemy_label.Click += new System.EventHandler(this.enemy_label_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.enemy_label);
             this.Controls.Add(this.playerStats_label);
             this.Controls.Add(this.down_button);
             this.Controls.Add(this.right_button);
@@ -108,6 +120,7 @@ namespace GADE_Task_1
         private System.Windows.Forms.Button right_button;
         private System.Windows.Forms.Button down_button;
         private System.Windows.Forms.Label playerStats_label;
+        private System.Windows.Forms.Label enemy_label;
     }
 }
 

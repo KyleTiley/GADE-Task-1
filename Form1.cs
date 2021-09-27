@@ -19,7 +19,13 @@ namespace GADE_Task_1
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            playerStats_label.Text = ToString();
+            enemy_label.Text = ToString();
+        }
 
+        private void enemy_label_Click(object sender, EventArgs e)
+        {
+            
         }
     }
 
